@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "db:push:turso": "USE_TURSO=true npx tsx scripts/push-turso.ts",
+    "db:seed:turso": "USE_TURSO=true npx tsx prisma/seed.ts",
     "start": "next start",
     "lint": "eslint",
     "postinstall": "prisma generate",
@@ -15,7 +17,9 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
+    "@libsql/client": "^0.17.4",
     "@prisma/adapter-better-sqlite3": "^7.9.1",
+    "@prisma/adapter-libsql": "^7.9.1",
     "@prisma/client": "^7.9.1",
     "better-sqlite3": "^12.11.1",
     "class-variance-authority": "^0.7.1",

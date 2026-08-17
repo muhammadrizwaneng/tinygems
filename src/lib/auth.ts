@@ -4,7 +4,7 @@ import { cookies } from "next/headers"
 const COOKIE = "tg_admin"
 
 function secret() {
-  return process.env.ADMIN_PASSWORD || "tinygems-admin"
+  return process.env.ADMIN_PASSWORD || "rizwanstudioAdmin"
 }
 
 function token() {
