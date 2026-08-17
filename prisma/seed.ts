@@ -1,4 +1,12 @@
-import { prisma } from "../src/lib/prisma"
+import "dotenv/config"
+import { randomBytes } from "node:crypto"
+import { createClient } from "@libsql/client"
+
+import { prisma, shouldUseTurso } from "../src/lib/prisma"
+
+function makeId() {
+  return randomBytes(12).toString("hex")
+}
 
 const categories = [
   { name: "Rings", slug: "rings", sortOrder: 1 },
@@ -339,7 +347,74 @@ const products = [
   },
 ]
 
+async function seedTurso() {
+  const url = process.env.TURSO_DATABASE_URL
+  const authToken = process.env.TURSO_AUTH_TOKEN
+  if (!url || !authToken) {
+    throw new Error("TURSO_DATABASE_URL and TURSO_AUTH_TOKEN are required")
+  }
+
+  const client = createClient({
+    url: url.replace(/^libsql:\/\//, "https://"),
+    authToken,
+  })
+
+  await client.execute("DELETE FROM Product")
+  await client.execute("DELETE FROM Category")
+
+  const slugToId: Record<string, string> = {}
+  for (const category of categories) {
+    const id = makeId()
+    slugToId[category.slug] = id
+    await client.execute({
+      sql: `INSERT INTO Category (id, name, slug, sortOrder) VALUES (?, ?, ?, ?)`,
+      args: [id, category.name, category.slug, category.sortOrder],
+    })
+  }
+
+  const now = new Date().toISOString()
+  for (const product of products) {
+    const { categorySlug, ...data } = product
+    await client.execute({
+      sql: `INSERT INTO Product (
+        id, name, slug, sku, description, price, compareAtPrice, image,
+        studioImage, wornImage, collection, featured, onSale, isNew, stock,
+        reviewCount, rating, categoryId, createdAt, updatedAt
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [
+        makeId(),
+        data.name,
+        data.slug,
+        data.sku,
+        data.description,
+        data.price,
+        data.compareAtPrice,
+        data.image,
+        "/products/stainless.svg",
+        categorySlug === "other" || categorySlug === "hair-accessories"
+          ? "/products/hair.svg"
+          : "/products/sets.svg",
+        data.collection,
+        data.featured ? 1 : 0,
+        data.onSale ? 1 : 0,
+        data.isNew ? 1 : 0,
+        25,
+        data.reviewCount,
+        data.rating,
+        slugToId[categorySlug],
+        now,
+        now,
+      ],
+    })
+  }
+}
+
 async function main() {
+  if (shouldUseTurso()) {
+    await seedTurso()
+    return
+  }
+
   await prisma.product.deleteMany()
   await prisma.category.deleteMany()
 

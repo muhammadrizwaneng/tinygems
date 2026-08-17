@@ -78,24 +78,34 @@ export async function listProducts(filters: ProductFilters = {}) {
           ? { reviewCount: "desc" }
           : { createdAt: "desc" }
 
-  const products = await prisma.product.findMany({ where, orderBy })
-  return products.map(toCatalogProduct)
+  try {
+    const products = await prisma.product.findMany({ where, orderBy })
+    return products.map(toCatalogProduct)
+  } catch (error) {
+    console.error("listProducts failed", error)
+    return []
+  }
 }
 
 export async function relatedProducts(productId: string, categoryId: string) {
-  const sameCategory = await prisma.product.findMany({
-    where: { category: { id: categoryId }, NOT: { id: productId } },
-    take: 4,
-    orderBy: { reviewCount: "desc" },
-  })
-  if (sameCategory.length >= 4) return sameCategory.map(toCatalogProduct)
+  try {
+    const sameCategory = await prisma.product.findMany({
+      where: { category: { id: categoryId }, NOT: { id: productId } },
+      take: 4,
+      orderBy: { reviewCount: "desc" },
+    })
+    if (sameCategory.length >= 4) return sameCategory.map(toCatalogProduct)
 
-  const extra = await prisma.product.findMany({
-    where: {
-      id: { notIn: [productId, ...sameCategory.map((item) => item.id)] },
-    },
-    take: 4 - sameCategory.length,
-    orderBy: { onSale: "desc" },
-  })
-  return [...sameCategory, ...extra].map(toCatalogProduct)
+    const extra = await prisma.product.findMany({
+      where: {
+        id: { notIn: [productId, ...sameCategory.map((item) => item.id)] },
+      },
+      take: 4 - sameCategory.length,
+      orderBy: { onSale: "desc" },
+    })
+    return [...sameCategory, ...extra].map(toCatalogProduct)
+  } catch (error) {
+    console.error("relatedProducts failed", error)
+    return []
+  }
 }
