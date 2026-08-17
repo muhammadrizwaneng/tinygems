@@ -1,5 +1,6 @@
 export const metadata = { title: "FAQs" }
 
+
 const faqs = [
   {
     q: "Do you deliver all over Pakistan?",
