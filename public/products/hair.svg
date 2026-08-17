@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Hair accessory">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fae8ff"/>
+      <stop offset="100%" stop-color="#fce7f3"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#g)"/>
+  <g stroke="#9d174d" fill="#fbcfe8" stroke-width="5">
+    <path d="M80 200h240"/>
+    <circle cx="140" cy="200" r="16"/>
+    <circle cx="200" cy="200" r="22"/>
+    <circle cx="260" cy="200" r="16"/>
+  </g>
+</svg>

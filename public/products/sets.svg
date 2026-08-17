@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Jewelry set">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fae8ff"/>
+      <stop offset="100%" stop-color="#fce7f3"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#g)"/>
+  <g fill="none" stroke="#9d174d" stroke-width="7">
+    <path d="M90 80c70 90 150 90 220 0"/>
+    <circle cx="200" cy="230" r="55" fill="#fbcfe8"/>
+    <circle cx="130" cy="310" r="18" fill="#fbcfe8"/>
+    <circle cx="270" cy="310" r="18" fill="#fbcfe8"/>
+  </g>
+</svg>
