@@ -4,13 +4,11 @@ import { notFound } from "next/navigation"
 import { Star } from "lucide-react"
 
 import { ProductActions } from "@/components/ProductActions"
-import {
-  galleryFromProduct,
-  ProductGallery,
-} from "@/components/ProductGallery"
+import { ProductGallery } from "@/components/ProductGallery"
 import { ProductGrid } from "@/components/ProductGrid"
 import { Badge } from "@/components/ui/badge"
 import { relatedProducts, toCatalogProduct } from "@/lib/catalog"
+import { galleryFromProduct } from "@/lib/gallery"
 import { discountPercent, formatPkr } from "@/lib/money"
 import { prisma } from "@/lib/prisma"
 

@@ -11,11 +11,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
+import type { GalleryImage } from "@/lib/gallery"
 
-export type GalleryImage = {
-  src: string
-  label: string
-}
+export type { GalleryImage }
 
 export function ProductGallery({
   images,
@@ -102,19 +100,4 @@ export function ProductGallery({
       </Dialog>
     </>
   )
-}
-
-export function galleryFromProduct(product: {
-  image: string
-  studioImage?: string | null
-  wornImage?: string | null
-}): GalleryImage[] {
-  const images: GalleryImage[] = [{ src: product.image, label: "Main" }]
-  if (product.studioImage) {
-    images.push({ src: product.studioImage, label: "Studio" })
-  }
-  if (product.wornImage) {
-    images.push({ src: product.wornImage, label: "Worn / set" })
-  }
-  return images
 }
